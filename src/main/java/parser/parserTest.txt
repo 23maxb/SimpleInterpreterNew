@@ -1,0 +1,14 @@
+PROCEDURE Add(y, x);
+BEGIN
+	WRITELN(y);
+	WRITELN(x + y);
+END;
+
+BEGIN
+    y := 10;
+	ignore := Add(4, y);
+END;
+.
+.
+.
+.
