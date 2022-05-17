@@ -28,8 +28,8 @@ public class Scanner
 
     public static void main(String[] args) throws FileNotFoundException, ScanErrorException
     {
-        InputStream inputStream = new FileInputStream("C:\\Users\\analyst\\IdeaProjects\\scanner2" +
-                "\\src\\main\\java\\parser\\parserTest1.txt");
+        InputStream inputStream = new FileInputStream("C:\\Users\\maxbl\\IdeaProjects" +
+                "\\SimpleInterpreter\\src\\main\\java\\parser\\simpleTest.txt");
         Scanner a = new Scanner(inputStream);
         while (a.hasNext())
             System.out.println(a.nextToken());

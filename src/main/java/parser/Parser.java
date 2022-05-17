@@ -40,8 +40,8 @@ public class Parser
      */
     public static void main(String[] args) throws ScanErrorException, FileNotFoundException
     {
-        emit("C:\\Users\\maxbl\\IdeaProjects\\scanner\\src\\main\\java\\parser\\parserTest9" +
-                ".txt");
+        run("C:\\Users\\maxbl\\IdeaProjects\\SimpleInterpreter\\src\\main\\java\\parser" +
+                "\\simpleTest.txt");
     }
 
     /**
@@ -125,24 +125,7 @@ public class Parser
         ArrayList<ProcedureDeclaration> procedures = new ArrayList<>();
         ArrayList<String> vars = new ArrayList<>();
         ArrayList<Statement> a = new ArrayList<>();
-        while (scanner.hasNext())
-            if (currentToken.compareTo("PROCEDURE") == 0)
-                procedures.add(parseDeclaration());
-            else if (currentToken.compareTo("VAR") == 0)
-            {
-                eat("VAR");
-                while (currentToken.compareTo(";") != 0)
-                    if (currentToken.compareTo(",") == 0)
-                        eat(",");
-                    else
-                    {
-                        vars.add(currentToken);
-                        eat(currentToken);
-                    }
-                eat(";");
-            }
-            else
-                a.add(parseStatement());
+        a.add(parseStatement());
         System.out.println("All Variables: " + vars);
         return new Program(new Block(a), new Environment(procedures, vars));
     }
