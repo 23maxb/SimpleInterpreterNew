@@ -49,7 +49,7 @@ public class ProcedureCall implements Statement, Expression
      * @postcondition the code has been executed and the variables have been updated
      */
     @Override
-    public void exec(@NotNull @NotNull Environment env)
+    public void exec(@NotNull Environment env)
     {
         Object[] args =
                 Arrays.stream(arguments).map(expression -> expression.evaluate(env)).toArray();

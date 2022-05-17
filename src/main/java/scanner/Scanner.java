@@ -1,7 +1,5 @@
 package scanner;
 
-import se.eris.notnull.NotNull;
-
 import java.io.*;
 import java.util.regex.Pattern;
 
@@ -88,8 +86,7 @@ public class Scanner
      * @return the identifier.
      * @throws ScanErrorException if the scanner runs into an error! (most commonly end of file)
      */
-    private @NotNull
-    String scanIdentifier() throws ScanErrorException
+    private String scanIdentifier() throws ScanErrorException
     {
         StringBuilder a = new StringBuilder();
         while (isDigit(currentChar) || isLetter(currentChar))
@@ -131,8 +128,7 @@ public class Scanner
      * @return "/"
      * @throws ScanErrorException if the scanner runs into an error! (most commonly end of file)
      */
-    private @NotNull
-    String scanSemiColon() throws ScanErrorException
+    private String scanSemiColon() throws ScanErrorException
     {
         StringBuilder a = new StringBuilder();
         while (';' == (currentChar))
