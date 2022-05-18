@@ -232,44 +232,46 @@ public class Parser
      */
     private Statement parseStatement() throws ScanErrorException
     {
-        if (Objects.equals(currentToken, "WRITELN"))
+        if (Objects.equals(currentToken, "writeln"))
         {
-            eat("WRITELN");
-            eat("(");
+            eat("display");
             Expression exp = parseExpression();
-            eat(")");
-            eat(";");
             return new Writeln(exp);
         }
-        else if (currentToken.compareTo("BEGIN") == 0)
+        else if (currentToken.compareTo("begin") == 0)
         {
             ArrayList<Statement> b = new ArrayList<>();
-            eat("BEGIN");
-            while (currentToken.compareTo("END") != 0)
+            eat("begin");
+            while (currentToken.compareTo("end") != 0)
                 b.add(parseStatement());
-            eat("END");
+            eat("end");
             eat(";");
             return new Block(b);
         }
-        else if (currentToken.compareTo("IF") == 0)
+        else if (currentToken.compareTo("if") == 0)
         {
-            eat("IF");
+            eat("if");
             Expression a = parseConditional();
-            eat("THEN");
+            eat("then");
             Statement b = parseStatement();
             return new If(a, b);
         }
-        else if (currentToken.compareTo("WHILE") == 0)
+        else if (currentToken.compareTo("while") == 0)
         {
-            eat("WHILE");
+            eat("while");
             Expression a = parseConditional();
-            eat("DO");
+            eat("do");
             Block b = (Block) parseStatement();
             return new WhileLoop(a, b);
         }
-        else if (currentToken.compareTo("RETURN") == 0)
+        else if (currentToken.compareTo("read") == 0)
         {
-            eat("RETURN");
+            eat("read");
+            return new Read(currentToken);
+        }
+        else if (currentToken.compareTo("return") == 0)
+        {
+            eat("return");
             Expression toReturn = parseExpression();
         }
         // varName represents the variable name or the procedure name

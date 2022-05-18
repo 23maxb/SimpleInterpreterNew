@@ -14,8 +14,12 @@ import java.util.Scanner;
  */
 public class Read implements Statement
 {
+    public Read(String variableName)
+    {
+        this.variableName = variableName;
+    }
 
-    private String variableName;
+    private final String variableName;
 
     /**
      * Executes the statement and does whatever operation is needed.
