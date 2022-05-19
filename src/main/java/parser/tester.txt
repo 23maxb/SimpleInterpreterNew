@@ -1,4 +1,6 @@
-display 3
 assign x = 1
+while x < 10 do
+assign x = x + 1
 display x
+end
 .

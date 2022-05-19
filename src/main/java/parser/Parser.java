@@ -41,7 +41,7 @@ public class Parser
     public static void main(String[] args) throws ScanErrorException, FileNotFoundException
     {
         run("C:\\Users\\maxbl\\IdeaProjects\\SimpleInterpreter\\src\\main\\java\\parser" +
-                "\\simpleTest.txt");
+                "\\tester.txt");
     }
 
     /**
@@ -288,8 +288,9 @@ public class Parser
             eat("while");
             Expression a = parseConditional();
             eat("do");
-            Block b = (Block) parseStatement();
-            return new WhileLoop(a, b);
+            ArrayList<Statement> c = (new ArrayList<>());
+            c.add(parseStatement());
+            return new WhileLoop(a, new Block(c));
         }
         else if (currentToken.compareTo("read") == 0)
         {
