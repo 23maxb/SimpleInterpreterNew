@@ -232,7 +232,7 @@ public class Parser
      */
     private Statement parseStatement() throws ScanErrorException
     {
-        if (Objects.equals(currentToken, "writeln"))
+        if (Objects.equals(currentToken, "display"))
         {
             eat("display");
             Expression exp = parseExpression();
@@ -277,7 +277,7 @@ public class Parser
         // varName represents the variable name or the procedure name
         String varName = currentToken;
         eat(currentToken);
-        eat(":=");
+        eat("=");
         Statement toReturn = new Assignment(varName, parseExpression());
         eat(";");
         return toReturn;
