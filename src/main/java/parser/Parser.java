@@ -125,9 +125,23 @@ public class Parser
         ArrayList<ProcedureDeclaration> procedures = new ArrayList<>();
         ArrayList<String> vars = new ArrayList<>();
         ArrayList<Statement> a = new ArrayList<>();
-        a.add(parseStatement());
+        while (hasMore())
+            try
+            {
+                a.add(parseStatement());
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                break;
+            }
         System.out.println("All Variables: " + vars);
         return new Program(new Block(a), new Environment(procedures, vars));
+    }
+
+    private boolean hasMore()
+    {
+        return currentToken != "EOF" && currentToken != "";
     }
 
     /**
@@ -140,7 +154,9 @@ public class Parser
      */
     public void run() throws ScanErrorException
     {
-        parseProgram().exec(new Environment());
+        Program p = parseProgram();
+        System.out.println("Abstract Syntax Tree: " + p);
+        p.exec(new Environment());
     }
 
     /**
@@ -189,7 +205,6 @@ public class Parser
                 parameters.add(new Variable(currentToken));
                 eat(currentToken);
             }
-        eat(";");
         return new ProcedureDeclaration(methodName, parseStatement(),
                 parameters.toArray(Variable[]::new));
     }
@@ -253,8 +268,20 @@ public class Parser
             eat("if");
             Expression a = parseConditional();
             eat("then");
-            Statement b = parseStatement();
-            return new If(a, b);
+            ArrayList<Statement> c = new ArrayList<>();
+            while (!Objects.equals(currentToken, "else") && !Objects.equals(currentToken, "end"))
+                c.add(parseStatement());
+            if (currentToken.equals("end"))
+                eat("end");
+            else
+            {
+                ArrayList<Statement> d = new ArrayList<>();
+                d.add(new If(a, new Block(c)));
+                d.add(new If(new BinOp(new Number(1), "<>", a), new Block(c)));//TODO make else
+                // statement
+                return new Block(d);
+            }
+            return new If(a, new Block(c));
         }
         else if (currentToken.compareTo("while") == 0)
         {
@@ -275,12 +302,12 @@ public class Parser
             Expression toReturn = parseExpression();
         }
         // varName represents the variable name or the procedure name
+
+        eat("assign");
         String varName = currentToken;
         eat(currentToken);
         eat("=");
-        Statement toReturn = new Assignment(varName, parseExpression());
-        eat(";");
-        return toReturn;
+        return new Assignment(varName, parseExpression());
     }
 
     /**
@@ -294,7 +321,7 @@ public class Parser
     private Expression parseConditional() throws ScanErrorException
     {
         Expression res = (parseExpression());
-        while ((currentToken.equals("==") || currentToken.equals(">") || currentToken.equals("<")
+        while ((currentToken.equals("=") || currentToken.equals(">") || currentToken.equals("<")
                 || currentToken.equals("<=") || currentToken.equals(">=") || currentToken.equals(
                 "<>")))
         {
@@ -318,7 +345,7 @@ public class Parser
                 eat(">=");
                 res = new BinOp(res, ">=", parseExpression());
             }
-            else if (currentToken.compareTo("==") == 0)
+            else if (currentToken.compareTo("=") == 0)
             {
                 eat("==");
                 res = new BinOp(res, "==", parseExpression());
@@ -392,6 +419,7 @@ public class Parser
      */
     private Expression parseFactor() throws ScanErrorException
     {
+
         if (Objects.equals(currentToken, "("))
         {
             eat("(");
@@ -439,8 +467,8 @@ public class Parser
             return new ProcedureCall(a, b.toArray(Expression[]::new));
         }
         else
-            return new Variable(a);
-    }  // end of parseFactor
+            return new Variable(a);// end of parseFactor
+    }
 
     /**
      * Checks if the current token is an integer.

@@ -3,7 +3,7 @@ assign x = 1
 display x read x
 while x < 10 do 
    display x
-   assign x = x+1
+   assign x = x + 1
    display x < 5 > 3
 end
 if x = 9 then
@@ -22,3 +22,4 @@ end
 end
 display x + 4
 end
+.
