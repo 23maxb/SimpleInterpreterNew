@@ -3,6 +3,8 @@ package ast;
 import emitter.Emitter;
 import environment.Environment;
 
+import java.util.ArrayList;
+
 /**
  * Creates a statement that can be executed if a condition is true
  *
@@ -13,17 +15,32 @@ public class If implements Statement
 {
     private final Expression condition;
     private final Statement b;
+    private final Statement e;
 
     /**
      * Creates a statement that can be executed if a condition is true.
      *
      * @param condition the condition to check
      * @param block     the block to run if the condition is true
+     * @param e
      */
-    public If(Expression condition, Statement block)
+    public If(Expression condition, Statement block, Statement e)
     {
         this.condition = condition;
         b = block;
+        this.e = e;
+    }
+
+    /**
+     * Creates a statement that can be executed if a condition is true.
+     *
+     * @param condition the condition to check
+     * @param block     the block to run if the condition is true
+     * @param e
+     */
+    public If(Expression condition, Statement block)
+    {
+        this(condition, block, new Block(new ArrayList<>()));
     }
 
     /**
@@ -34,11 +51,14 @@ public class If implements Statement
     @Override
     public void exec(Environment env)
     {
-        if ((((int) ((Number) condition.evaluate(env)).evaluate(env)) == 1)
-                || (boolean) condition.evaluate(env))
-        {
+        if (!((condition.evaluate(env) instanceof Boolean) && !((Boolean) condition.evaluate(env)))
+                && (((condition.evaluate(env) instanceof Boolean)
+                && ((Boolean) condition.evaluate(env)))
+                || (((int) ((Number) condition.evaluate(env)).evaluate(env)) == 1)
+                || (boolean) condition.evaluate(env)))
             b.exec(env);
-        }
+        else
+            e.exec(env);
     }
 
     /**

@@ -41,7 +41,7 @@ public class Parser
     public static void main(String[] args) throws ScanErrorException, FileNotFoundException
     {
         run("C:\\Users\\maxbl\\IdeaProjects\\SimpleInterpreter\\src\\main\\java\\parser" +
-                "\\tester.txt");
+                "\\simpleTest.txt");
     }
 
     /**
@@ -71,6 +71,7 @@ public class Parser
     @SuppressWarnings("UnusedReturnValue")
     private String eat(String expected) throws ScanErrorException
     {
+        System.out.println("Eating " + currentToken + " and expecting " + expected);
         if (currentToken.equals(expected))
         {
             //double declaration needed to reassign currentToken DO NOT MERGE!!!!
@@ -126,22 +127,16 @@ public class Parser
         ArrayList<String> vars = new ArrayList<>();
         ArrayList<Statement> a = new ArrayList<>();
         while (hasMore())
-            try
-            {
-                a.add(parseStatement());
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                break;
-            }
+        {
+            a.add(parseStatement());
+        }
         System.out.println("All Variables: " + vars);
         return new Program(new Block(a), new Environment(procedures, vars));
     }
 
     private boolean hasMore()
     {
-        return currentToken != "EOF" && currentToken != "";
+        return !Objects.equals(currentToken, "EOF") && !Objects.equals(currentToken, "");
     }
 
     /**
@@ -250,7 +245,7 @@ public class Parser
         if (Objects.equals(currentToken, "display"))
         {
             eat("display");
-            Expression exp = parseExpression();
+            Expression exp = parseConditional();
             return new Writeln(exp);
         }
         else if (currentToken.compareTo("begin") == 0)
@@ -269,19 +264,17 @@ public class Parser
             Expression a = parseConditional();
             eat("then");
             ArrayList<Statement> c = new ArrayList<>();
+            ArrayList<Statement> e = new ArrayList<>();// this will be used as the else statement
             while (!Objects.equals(currentToken, "else") && !Objects.equals(currentToken, "end"))
                 c.add(parseStatement());
-            if (currentToken.equals("end"))
-                eat("end");
-            else
+            if (!currentToken.equals("end"))
             {
-                ArrayList<Statement> d = new ArrayList<>();
-                d.add(new If(a, new Block(c)));
-                d.add(new If(new BinOp(new Number(1), "<>", a), new Block(c)));//TODO make else
-                // statement
-                return new Block(d);
+                eat("else");
+                while (!Objects.equals(currentToken, "end"))
+                    e.add(parseStatement());
             }
-            return new If(a, new Block(c));
+            eat("end");
+            return new If(a, new Block(c), new Block(e));
         }
         else if (currentToken.compareTo("while") == 0)
         {
@@ -289,13 +282,17 @@ public class Parser
             Expression a = parseConditional();
             eat("do");
             ArrayList<Statement> c = (new ArrayList<>());
-            c.add(parseStatement());
+            while (!Objects.equals(currentToken, "end"))
+                c.add(parseStatement());
+            eat("end");
             return new WhileLoop(a, new Block(c));
         }
         else if (currentToken.compareTo("read") == 0)
         {
             eat("read");
-            return new Read(currentToken);
+            Read r = new Read(currentToken);
+            eat(currentToken); //this is the variable name
+            return r;
         }
         else if (currentToken.compareTo("return") == 0)
         {
@@ -348,7 +345,7 @@ public class Parser
             }
             else if (currentToken.compareTo("=") == 0)
             {
-                eat("==");
+                eat("=");
                 res = new BinOp(res, "==", parseExpression());
             }
             else
