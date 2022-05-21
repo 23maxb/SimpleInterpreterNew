@@ -126,7 +126,7 @@ public class Parser
         ArrayList<ProcedureDeclaration> procedures = new ArrayList<>();
         ArrayList<String> vars = new ArrayList<>();
         ArrayList<Statement> a = new ArrayList<>();
-        while (hasMore())
+        while (!Objects.equals(currentToken, "end"))
         {
             a.add(parseStatement());
         }

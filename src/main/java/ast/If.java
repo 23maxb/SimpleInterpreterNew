@@ -69,7 +69,8 @@ public class If implements Statement
     @Override
     public String toString()
     {
-        return "IF(" + condition + " THEN: " + b + ")";
+        return "IF(" + condition + " THEN( " + b + "); ELSE( " + e + "))";
+
     }
 
     /**
