@@ -35,6 +35,18 @@ public class Scanner
             System.out.println(a.nextToken());
     }
 
+    public void close()
+    {
+        try
+        {
+            in.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private void debug(Object a)
     {
         if (debug)

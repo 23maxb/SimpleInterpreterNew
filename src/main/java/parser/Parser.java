@@ -71,7 +71,6 @@ public class Parser
     @SuppressWarnings("UnusedReturnValue")
     private String eat(String expected) throws ScanErrorException
     {
-        System.out.println("Eating " + currentToken + " and expecting " + expected);
         if (currentToken.equals(expected))
         {
             //double declaration needed to reassign currentToken DO NOT MERGE!!!!
@@ -130,6 +129,8 @@ public class Parser
         {
             a.add(parseStatement());
         }
+        eat("end");
+        this.scanner.close();
         System.out.println("All Variables: " + vars);
         return new Program(new Block(a), new Environment(procedures, vars));
     }
@@ -417,7 +418,6 @@ public class Parser
      */
     private Expression parseFactor() throws ScanErrorException
     {
-
         if (Objects.equals(currentToken, "("))
         {
             eat("(");
