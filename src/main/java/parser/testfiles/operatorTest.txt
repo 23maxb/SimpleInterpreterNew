@@ -1,0 +1,8 @@
+assign x = 9
+assign x = x + 1
+display x
+display x * 2
+display x / 2
+display x - 2
+end
+.

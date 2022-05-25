@@ -1,0 +1,6 @@
+assign x = 9
+if x = 9 do
+display 129
+end
+end
+.
