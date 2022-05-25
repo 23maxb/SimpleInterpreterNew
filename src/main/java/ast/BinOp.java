@@ -51,6 +51,16 @@ public class BinOp implements Expression
     @Override
     public Object evaluate(Environment e)
     {
+        if (val1.evaluate(e) instanceof Boolean)
+            if ((boolean) val1.evaluate(e))
+                val1 = new Number(1);
+            else
+                val1 = new Number(0);
+        if (val2.evaluate(e) instanceof Boolean)
+            if ((boolean) val2.evaluate(e))
+                val2 = new Number(1);
+            else
+                val2 = new Number(0);
         return switch (operator)
                 {
                     case "+" -> (int) val1.evaluate(e) + (int) val2.evaluate(e);
@@ -99,33 +109,39 @@ public class BinOp implements Expression
         {
             case "+" -> e.emit("add $t0, $t1, $t2 #adding values");
             case "-" -> e.emit("sub $t0, $t1, $t2 #subtracting values");
-            case "/" -> {
+            case "/" ->
+            {
                 e.emit("div $t1, $t2");
                 e.emit("mflo $t0");
             }
-            case "*" -> {
+            case "*" ->
+            {
                 e.emit("mult $t1, $t2");
                 e.emit("mflo $t0");
             }
-            case "%", "MOD" -> {
+            case "%", "MOD" ->
+            {
                 e.emit("div $t1, $t2");
                 e.emit("mfhi $t0");
             }
-            case ">" -> {
+            case ">" ->
+            {
                 String l = e.label();
                 e.emit("li $t0, 1");
                 e.emit("bgt $t1, $t2, " + l);
                 e.emit("li $t0, 0");
                 e.emit(l + ":");
             }
-            case "<" -> {
+            case "<" ->
+            {
                 String l = e.label();
                 e.emit("li $t0, 1");
                 e.emit("blt $t1, $t2, " + l);
                 e.emit("li $t0, 0");
                 e.emit(l + ":");
             }
-            case ">=" -> {
+            case ">=" ->
+            {
                 String l = e.label();
                 e.emit("li $t0, 1");
                 e.emit("bgt $t1, $t2, " + l);
@@ -133,7 +149,8 @@ public class BinOp implements Expression
                 e.emit("li $t0, 0");
                 e.emit(l + ":");
             }
-            case "<=" -> {
+            case "<=" ->
+            {
                 String l = e.label();
                 e.emit("li $t0, 1");
                 e.emit("blt $t1, $t2, " + l);
@@ -141,21 +158,24 @@ public class BinOp implements Expression
                 e.emit("li $t0, 0");
                 e.emit(l + ":");
             }
-            case "<>" -> {
+            case "<>" ->
+            {
                 String l = e.label();
                 e.emit("li $t0, 1");
                 e.emit("bne $t1, $t2, " + l);
                 e.emit("li $t0, 0");
                 e.emit(l + ":");
             }
-            case "==" -> {
+            case "==" ->
+            {
                 String l = e.label();
                 e.emit("li $t0, 1");
                 e.emit("beq $t1, $t2, " + l);
                 e.emit("li $t0, 0");
                 e.emit(l + ":");
             }
-            case "&&" -> {
+            case "&&" ->
+            {
                 String a = e.label();
                 String b = e.label();
                 String c = e.label();
@@ -169,7 +189,8 @@ public class BinOp implements Expression
                 e.emit("li $t0, 1");
                 e.emit(c + ":");
             }
-            case "||" -> {
+            case "||" ->
+            {
                 String a = e.label();
                 e.emit("li $t0, 1");
                 e.emit("beq $t1, 1, " + a);
@@ -184,7 +205,7 @@ public class BinOp implements Expression
      * Returns true if the result of the expression is a boolean.
      * Otherwise false.
      *
-     * @return  true if the result of the expression is a boolean.
+     * @return true if the result of the expression is a boolean.
      */
     public boolean isBoolean()
     {

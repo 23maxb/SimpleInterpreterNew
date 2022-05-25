@@ -36,7 +36,6 @@ public class If implements Statement
      *
      * @param condition the condition to check
      * @param block     the block to run if the condition is true
-     * @param e
      */
     public If(Expression condition, Statement block)
     {
@@ -54,7 +53,8 @@ public class If implements Statement
         if (!((condition.evaluate(env) instanceof Boolean) && !((Boolean) condition.evaluate(env)))
                 && (((condition.evaluate(env) instanceof Boolean)
                 && ((Boolean) condition.evaluate(env)))
-                || (((int) ((Number) condition.evaluate(env)).evaluate(env)) == 1)
+                || (((condition.evaluate(env))) instanceof Number && ((int) ((Number) condition.evaluate(env)).evaluate(env)) > 0)
+                || (condition.evaluate(env) instanceof Integer && ((int) condition.evaluate(env)) > 0)
                 || (boolean) condition.evaluate(env)))
             b.exec(env);
         else

@@ -41,7 +41,7 @@ public class Parser
     public static void main(String[] args) throws ScanErrorException, FileNotFoundException
     {
         run("C:\\Users\\maxbl\\IdeaProjects\\SimpleInterpreter\\src\\main\\java\\parser" +
-                "\\testfiles\\displayTest.txt");
+                "\\testfiles\\simpleTest2.txt");
     }
 
     /**
@@ -125,11 +125,12 @@ public class Parser
         ArrayList<ProcedureDeclaration> procedures = new ArrayList<>();
         ArrayList<String> vars = new ArrayList<>();
         ArrayList<Statement> a = new ArrayList<>();
-        while (!Objects.equals(currentToken, "end"))
+        while (!Objects.equals(currentToken, "end") && !Objects.equals(currentToken, "endfile") && !Objects.equals(currentToken, "EOF"))
         {
             a.add(parseStatement());
         }
-        eat("end");
+        if (Objects.equals(currentToken, "end"))
+            eat("end");
         this.scanner.close();
         System.out.println("All Variables: " + vars);
         return new Program(new Block(a), new Environment(procedures, vars));
@@ -263,7 +264,10 @@ public class Parser
         {
             eat("if");
             Expression a = parseConditional();
-            eat("then");
+            if (currentToken.compareTo("then") == 0)
+                eat("then");
+            else
+                eat("do");
             ArrayList<Statement> c = new ArrayList<>();
             ArrayList<Statement> e = new ArrayList<>();// this will be used as the else statement
             while (!Objects.equals(currentToken, "else") && !Objects.equals(currentToken, "end"))
@@ -301,7 +305,6 @@ public class Parser
             Expression toReturn = parseExpression();
         }
         // varName represents the variable name or the procedure name
-
         eat("assign");
         String varName = currentToken;
         eat(currentToken);
@@ -421,7 +424,7 @@ public class Parser
         if (Objects.equals(currentToken, "("))
         {
             eat("(");
-            Expression a = parseTerm();
+            Expression a = parseConditional();
             eat(")");
             return a;
         }
