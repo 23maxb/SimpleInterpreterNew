@@ -73,7 +73,7 @@ public class BinOp implements Expression
                     case ">=" -> (int) val1.evaluate(e) >= (int) val2.evaluate(e);
                     case "<=" -> (int) val1.evaluate(e) <= (int) val2.evaluate(e);
                     case "<>" -> (int) val1.evaluate(e) != (int) val2.evaluate(e);
-                    case "==" -> (int) val1.evaluate(e) == (int) val2.evaluate(e);
+                    case "==", "=" -> (int) val1.evaluate(e) == (int) val2.evaluate(e);
                     case "&&" -> (boolean) val1.evaluate(e) && (boolean) val2.evaluate(e);
                     case "||" -> (boolean) val1.evaluate(e) || (boolean) val2.evaluate(e);
                     default -> throw new IllegalArgumentException("Operator '" + operator + "' " +
