@@ -34,14 +34,12 @@ public class WhileLoop implements Statement
     @Override
     public void exec(Environment env)
     {
-        while (
-                !((condition.evaluate(env) instanceof Boolean) && !((Boolean) condition.evaluate(env)))
-                &&
-                (
-                ((condition.evaluate(env) instanceof Boolean) && ((Boolean) condition.evaluate(env)))
-                        || (((int) ((Number) condition.evaluate(env)).evaluate(env)) == 1)
-                        || (boolean) condition.evaluate(env))
-        )
+        while (!((condition.evaluate(env) instanceof Boolean) && !((Boolean) condition.evaluate(env)))
+                && (((condition.evaluate(env) instanceof Boolean)
+                && ((Boolean) condition.evaluate(env)))
+                || (((condition.evaluate(env))) instanceof Number && ((int) ((Number) condition.evaluate(env)).evaluate(env)) > 0)
+                || (condition.evaluate(env) instanceof Integer && ((int) condition.evaluate(env)) > 0)
+                || (boolean) condition.evaluate(env)))
         {
             b.exec(env);
         }

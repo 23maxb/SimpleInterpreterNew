@@ -41,7 +41,7 @@ public class Parser
     public static void main(String[] args) throws ScanErrorException, FileNotFoundException
     {
         run("C:\\Users\\maxbl\\IdeaProjects\\SimpleInterpreter\\src\\main\\java\\parser" +
-                "\\testfiles\\simpleTest2.txt");
+                "\\testfiles\\whileTest.txt");
     }
 
     /**
